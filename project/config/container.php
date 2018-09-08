@@ -2,6 +2,10 @@
 
 use Slim\Container;
 
+// For DB Expression Builder
+use Illuminate\Database\Connectors\ConnectionFactory;
+use Illuminate\Database\Connection;
+
 $container = $app->getContainer();
 
 $container['environment'] = function () {
@@ -10,25 +14,25 @@ $container['environment'] = function () {
     return new Slim\Http\Environment($_SERVER);
 };
 
-$container['pdo'] = function (Container $container) {
+$container['db'] = function (Container $container) {
     $settings = $container->get('settings');
 
-    $host = $settings['db']['host'];
-    $dbname = $settings['db']['database'];
-    $username = $settings['db']['username'];
-    $password = $settings['db']['password'];
-    $charset = $settings['db']['charset'];
-    $collate = $settings['db']['collation'];
-
-    $dsn = "mysql:host=$host;dbname=$dbname;charset=$charset";
-
-    $options = [
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-        PDO::ATTR_PERSISTENT => false,
-        PDO::ATTR_EMULATE_PREPARES => false,
-        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-        PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES $charset COLLATE $collate"
+    $config = [
+        'driver' => 'mysql',
+        'host' => $settings['db']['host'],
+        'database' => $settings['db']['database'],
+        'username' => $settings['db']['username'],
+        'password' => $settings['db']['password'],
+        'charset' => $settings['db']['charset'],
+        'collation' => $settings['db']['collation'],
     ];
 
-    return new PDO($dsn, $username, $password, $options);
+    $factory = new ConnectionFactory(new \Illuminate\Container\Container());
+
+    return $factory->make($config);
 };
+
+$container['pdo'] = function (Container $container) {
+    return $container->get('db')->getPdo();
+};
+
