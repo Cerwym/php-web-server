@@ -1,14 +1,12 @@
 <?php
-use \Psr\Http\Message\ServerRequestInterface as Request;
-use \Psr\Http\Message\ResponseInterface as Response;
 
 require '../vendor/autoload.php';
 
-$app = new \Slim\App;
-$app->get('/hello/{name}', function(Request $request, Response $response, array $args) {
-    $name = $args['name'];
-    $response->getBody()->write("Hello, $name");
+$slim = new \Slim\App;
 
-    return $response;
-});
-$app->run();
+// Recursively add each php file under 'routes' so that we can add as many as needed without maintaining this.
+foreach (glob("../app/api/routes/*.php") as $filename) {
+    require_once ($filename);
+}
+
+$slim->run();
