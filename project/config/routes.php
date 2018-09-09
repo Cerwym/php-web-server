@@ -5,9 +5,7 @@
 
 use Slim\Http\Request;
 use Slim\Http\Response;
-
 use Valitron\Validator;
-
 
 $app->post('consoles/', function ($request) {
 
@@ -24,6 +22,7 @@ $app->get('/consoles', function () {
 /**
  * ADD NEW GAME
  * SUCCESS : Returns 201 Created
+ *  BODY : Id of the created record.
  * FAIL : Returns 400 BAD REQUEST
  */
 $app->post('/games', function (Request $request, Response $response, $params) {
@@ -35,14 +34,19 @@ $app->post('/games', function (Request $request, Response $response, $params) {
     $validator->rule('required', 'console_code')->message('{field} is required')->label("Console Code");
 
     if (!$validator->validate()) {
-
         $data = array('status' => false,
             'errors' => $validator->errors());
         return $response->withJson($data, 400);
     }
     else {
-        // Need to get ID created in the database.
-        return $response->withStatus(201);
+        // If the validation has passed, we're safe to query params in the body itself and INSERT.
+
+        $createdId = $this->get('db')->table('t_game')->insertGetId(
+            ['name' => $data['game_name'], 'console_id' => $data['console_code']]
+        );
+
+        // Return the Auto Incremented ID that represents the created record.
+        return $response->withJson(['game_id' => $createdId]);
     }
 });
 
