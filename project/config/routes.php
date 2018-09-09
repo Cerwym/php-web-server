@@ -6,7 +6,8 @@
 use Slim\Http\Request;
 use Slim\Http\Response;
 
-use Illuminate\Database\Connection;
+use Valitron\Validator;
+
 
 $app->post('consoles/', function ($request) {
 
@@ -20,10 +21,29 @@ $app->get('/consoles', function () {
 
 });
 
-$app->post('/games', function ($request) {
+/**
+ * ADD NEW GAME
+ * SUCCESS : Returns 201 Created
+ * FAIL : Returns 400 BAD REQUEST
+ */
+$app->post('/games', function (Request $request, Response $response, $params) {
 
-    echo "POST -> Create new game, i dont do anything yet.";
+    $data = $request->getParsedBody();
 
+    $validator = new Validator($data);
+    $validator ->rule('required', 'game_name')->message('{field} is required')->label('Game Name');
+    $validator->rule('required', 'console_code')->message('{field} is required')->label("Console Code");
+
+    if (!$validator->validate()) {
+
+        $data = array('status' => false,
+            'errors' => $validator->errors());
+        return $response->withJson($data, 400);
+    }
+    else {
+        // Need to get ID created in the database.
+        return $response->withStatus(201);
+    }
 });
 
 $app->get('/games', function (Request $request, Response $response) {
@@ -35,8 +55,12 @@ $app->get('/games', function (Request $request, Response $response) {
     return $response->withJson($rows);
 });
 
-$app->get('/games?console={console_id}', function ($request) {
+$app->get('/findgame?console={console_id}', function (Request $request, Response $response) {
 
-    echo "GET - games by ID, don't do anything just yet.";
+    $paramConsoleId = $request->get('console_id');
+
+    $data = $this->get('db')->table('t_game')->select('*')->where('console_id', '=', $paramConsoleId);
+
+    return $response->withJson($data);
 
 });
