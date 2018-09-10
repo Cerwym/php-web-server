@@ -8,6 +8,7 @@
 
 namespace App\GameService\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Interop\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -46,8 +47,15 @@ class GameController {
         }
     }
 
-    public function getById(Request $request, Response $response) {
-        echo "Get By ID -> I Do nothing just yet.";
+    public function getById(Request $request, Response $response, array $args) {
+
+        $dbResponse = $this->getByIdResponse($args['game_id'])->first();
+
+        if ($dbResponse != null) {
+            return $response->withJson($dbResponse);
+        } else {
+            return $response->withStatus(404);
+        }
     }
 
     public function getAll(Request $request, Response $response) {
@@ -62,15 +70,17 @@ class GameController {
      */
     public function delete(Request $request, Response $response, array $args) {
 
-        $gameId = $args['game_id'];
-
-        $dbResponse = $this->db->table('t_game')->where('identity_game_id', '=', $gameId)->delete();
+        $dbResponse = $this->getByIdResponse($args['game_id'])->delete();
 
         if($dbResponse){
             return $response->withStatus(202);
         } else {
             return $response->withStatus(404);
         }
+    }
+
+    private function getByIdResponse($id) {
+        return $dbResponse = $this->db->table('t_game')->where('identity_game_id', '=', $id);
     }
 
 }
