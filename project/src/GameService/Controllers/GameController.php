@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: cerwy
- * Date: 10/09/2018
- * Time: 14:23
- */
 
 namespace App\GameService\Controllers;
 
@@ -42,35 +36,37 @@ class GameController {
             );
 
             // Return the Auto Incremented ID that represents the created record.
-            return $response->withJson(['game_id' => $createdId]);
+            return $response->withJson(['game_id' => $createdId], 201);
         }
     }
 
-    public function getById(Request $request, Response $response) {
-        echo "Get By ID -> I Do nothing just yet.";
+    public function getById(Request $request, Response $response, array $args) {
+
+        $dbResponse = $this->getByIdResponse($args['game_id'])->first();
+
+        if ($dbResponse != null) {
+            return $response->withJson($dbResponse);
+        } else {
+            return $response->withStatus(404);
+        }
     }
 
     public function getAll(Request $request, Response $response) {
         return $response->withJson($this->db->table('t_game')->get(), 200);
     }
 
-    /**
-     * @param Request $request
-     * @param Response $response
-     * @param array $args
-     * @return Response 202 If record is deleted, 404 if ID is note found
-     */
     public function delete(Request $request, Response $response, array $args) {
-
-        $gameId = $args['game_id'];
-
-        $dbResponse = $this->db->table('t_game')->where('identity_game_id', '=', $gameId)->delete();
+        $dbResponse = $this->getByIdResponse($args['game_id'])->delete();
 
         if($dbResponse){
             return $response->withStatus(202);
         } else {
             return $response->withStatus(404);
         }
+    }
+
+    private function getByIdResponse($id) {
+        return $dbResponse = $this->db->table('t_game')->where('identity_game_id', '=', $id);
     }
 
 }

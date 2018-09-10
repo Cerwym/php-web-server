@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: cerwy
- * Date: 10/09/2018
- * Time: 15:16
- */
 
 namespace App\GameService\Controllers;
 
@@ -54,7 +48,4 @@ class ConsoleController {
         return $response->withStatus(201);
     }
 
-    public function delete(Request $request, Response $response) {
-        echo "At some point i'll be a real thing.";
-    }
 }

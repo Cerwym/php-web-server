@@ -11,6 +11,7 @@ $settings['root'] = dirname(__DIR__);
 $settings['temp'] = $settings['root'] . '/tmp';
 $settings['public'] = $settings['root'] . '/public';
 
+// PLOC - Custom View Display, will look at.
 // View settings
 $settings['twig'] = [
     'path' => $settings['root'] . '/templates',
