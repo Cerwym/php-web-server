@@ -50,4 +50,24 @@ class GameControllerTests extends BaseTest {
         $this->assertEquals(400, $response->getStatusCode());
         $this->assertArrayHasKey('game_name', $body['errors']);
     }
+
+    /** @test */
+    public function get_game_by_id_isValid_returns_data() {
+
+        $response = $this->request('GET', '/api/games/1');
+        $body = json_decode((string)$response->getBody(), true);
+
+        $this->assertEquals(200, $response->getStatusCode());
+        $this->assertArrayHasKey('name', $body);
+        $this->assertArrayHasKey('console_id', $body);
+
+        $this->assertEquals('Super Metroid', $body['name']);
+        $this->assertEquals('SNES', $body['console_id']);
+    }
+
+    public function get_game_by_id_isInvalid_returns_404() {
+
+        $response = $this->request('GET', '/api/games/9999999');
+        $this->assertEquals(404, $response->getStatusCode());
+    }
 }
