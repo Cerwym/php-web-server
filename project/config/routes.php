@@ -3,77 +3,33 @@
 // Get all consoles.
 // POST Console
 
+use App\GameService\Controllers\GameController;
+use App\GameService\Controllers\ConsoleController;
+
 use Slim\Http\Request;
 use Slim\Http\Response;
-use Valitron\Validator;
 
-use Illuminate\Support\Facades\DB;
+// Group up all publicly exposed APIs
+$app->group('/api', function () {
 
-$app->post('consoles/', function ($request) {
+    // All routes under '/games'
+    $this->get('/games', GameController::class . ':getAll')->setName('games.getAll');
+    $this->get('/games/{game_id}', GameController::class . ':getById')->setName('games.getById');
+    $this->delete('/games/{game_id}', GameController::class . ':delete')->setName('games.delete');
+    $this->post('/games', GameController::class . ':create')->setName('games.add');
 
-    echo "POST - Adding a console, I don't do anything just yet.";
+    // All routes under '/consoles'
+    $this->get('/consoles', ConsoleController::class . ':getAll')->setName('consoles.getAll');
+    $this->post('/consoles', ConsoleController::class . ':create')->setName('consoles.add');
+
+    // ToDo: Do something cool with this one like cascade down.
+    // $this->delete('/consoles/{console_id}', ConsoleController::class . 'delete')->setName('consoles.delete');
 
 });
 
-$app->get('/consoles', function () {
-
-    echo "GET - All consoles, I don't do anything just now.";
-
-});
-
-/**
- * ADD NEW GAME
- * SUCCESS : Returns 201 Created
- *  BODY : Id of the created record.
- * FAIL : Returns 400 BAD REQUEST
+/*
+ * TODO: Need to figure out how to do this one in SLIM.
  */
-$app->post('/games', function (Request $request, Response $response, $params) {
-
-    $data = $request->getParsedBody();
-
-    $validator = new Validator($data);
-    $validator ->rule('required', 'game_name')->message('{field} is required')->label('Game Name');
-    $validator->rule('required', 'console_code')->message('{field} is required')->label("Console Code");
-
-    if (!$validator->validate()) {
-        $data = array('status' => false,
-            'errors' => $validator->errors());
-        return $response->withJson($data, 400);
-    }
-    else {
-        // If the validation has passed, we're safe to query params in the body itself and INSERT.
-
-        $createdId = $this->get('db')->table('t_game')->insertGetId(
-            ['name' => $data['game_name'], 'console_id' => $data['console_code']]
-        );
-
-        // Return the Auto Incremented ID that represents the created record.
-        return $response->withJson(['game_id' => $createdId]);
-    }
-});
-
-$app->delete('/games/{game_id}', function(Request $request, Response $response, array $args) {
-
-    $gameId = $args['game_id'];
-
-    $dbResponse = $this->db->table('t_game')->where('identity_game_id', '=', $gameId)->delete();
-
-    if($dbResponse){
-        return $response->withStatus(202);
-    } else {
-        return $response->withStatus(404);
-    }
-});
-
-$app->get('/games', function (Request $request, Response $response) {
-
-    $db = $this->get('db');
-
-    $rows = $db->table('t_game')->get();
-
-    return $response->withJson($rows);
-});
-
 $app->get('/findgame?console={console_id}', function (Request $request, Response $response) {
 
     $paramConsoleId = $request->get('console_id');

@@ -4,7 +4,6 @@ use Slim\Container;
 
 // For DB Expression Builder
 use Illuminate\Database\Connectors\ConnectionFactory;
-use Illuminate\Database\Connection;
 
 $container = $app->getContainer();
 
