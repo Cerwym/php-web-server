@@ -7,6 +7,8 @@ use Slim\Http\Request;
 use Slim\Http\Response;
 use Valitron\Validator;
 
+use Illuminate\Support\Facades\DB;
+
 $app->post('consoles/', function ($request) {
 
     echo "POST - Adding a console, I don't do anything just yet.";
@@ -47,6 +49,19 @@ $app->post('/games', function (Request $request, Response $response, $params) {
 
         // Return the Auto Incremented ID that represents the created record.
         return $response->withJson(['game_id' => $createdId]);
+    }
+});
+
+$app->delete('/games/{game_id}', function(Request $request, Response $response, array $args) {
+
+    $gameId = $args['game_id'];
+
+    $dbResponse = $this->db->table('t_game')->where('identity_game_id', '=', $gameId)->delete();
+
+    if($dbResponse){
+        return $response->withStatus(202);
+    } else {
+        return $response->withStatus(404);
     }
 });
 
