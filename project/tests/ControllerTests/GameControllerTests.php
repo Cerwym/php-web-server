@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: cerwy
- * Date: 10/09/2018
- * Time: 17:03
- */
 
 namespace App\Test\ControllerTests;
 
@@ -13,7 +7,7 @@ use App\Test\BaseTest;
 class GameControllerTests extends BaseTest {
 
     /** @test */
-    public function create_game_when_data_isValid_returns_201created() {
+    public function create_game_when_data_isValid_returns_201() {
         $payload = [
             'game_name' => 'Super Mario Brothers 3',
             'console_code' => 'NES'
@@ -24,7 +18,7 @@ class GameControllerTests extends BaseTest {
     }
 
     /** @test */
-    public function create_game_with_no_console_code_returns_400badrequest() {
+    public function create_game_with_no_console_code_returns_400() {
         $payload = [
             'game_name' => 'Super Mario Brothers 3'
         ];
@@ -38,7 +32,7 @@ class GameControllerTests extends BaseTest {
     }
 
     /** @test */
-    public function create_game_with_no_name_returns_400badrequest() {
+    public function create_game_with_no_name_returns_400() {
         $payload = [
             'console_code' => 'SNES'
         ];

@@ -1,14 +1,7 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: cerwy
- * Date: 10/09/2018
- * Time: 14:23
- */
 
 namespace App\GameService\Controllers;
 
-use Illuminate\Support\Facades\DB;
 use Interop\Container\ContainerInterface;
 use Slim\Http\Request;
 use Slim\Http\Response;
@@ -62,14 +55,7 @@ class GameController {
         return $response->withJson($this->db->table('t_game')->get(), 200);
     }
 
-    /**
-     * @param Request $request
-     * @param Response $response
-     * @param array $args
-     * @return Response 202 If record is deleted, 404 if ID is note found
-     */
     public function delete(Request $request, Response $response, array $args) {
-
         $dbResponse = $this->getByIdResponse($args['game_id'])->delete();
 
         if($dbResponse){
