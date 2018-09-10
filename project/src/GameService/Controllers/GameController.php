@@ -42,7 +42,7 @@ class GameController {
             );
 
             // Return the Auto Incremented ID that represents the created record.
-            return $response->withJson(['game_id' => $createdId]);
+            return $response->withJson(['game_id' => $createdId], 201);
         }
     }
 
