@@ -15,7 +15,13 @@
 						"header": [],
 						"body": {},
 						"url": {
-							"raw": ""
+							"raw": "{{ipaddress}}/games",
+							"host": [
+								"{{ipaddress}}"
+							],
+							"path": [
+								"games"
+							]
 						},
 						"description": "Gets all games in the database"
 					},
@@ -25,8 +31,16 @@
 					"name": "Add New Game",
 					"request": {
 						"method": "POST",
-						"header": [],
-						"body": {},
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"game_name\": \"The Legend of Zelda : A Link to the Past\",\n\t\"console_code\": \"SNES\"\n}"
+						},
 						"url": {
 							"raw": "{{ipaddress}}/games",
 							"host": [
@@ -35,7 +49,8 @@
 							"path": [
 								"games"
 							]
-						}
+						},
+						"description": "* ADD NEW GAME\r\n* SUCCESS : Returns 201 Created\r\n* FAIL : Returns 400 BAD REQUEST"
 					},
 					"response": []
 				},
@@ -43,6 +58,30 @@
 					"name": "Get Games By Console",
 					"request": {
 						"method": "GET",
+						"header": [],
+						"body": {},
+						"url": {
+							"raw": "{{ipaddress}}/games?console=SNES",
+							"host": [
+								"{{ipaddress}}"
+							],
+							"path": [
+								"games"
+							],
+							"query": [
+								{
+									"key": "console",
+									"value": "SNES"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Game",
+					"request": {
+						"method": "DELETE",
 						"header": [],
 						"body": {},
 						"url": {
@@ -77,11 +116,37 @@
 				{
 					"name": "Add New Console",
 					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "console_code",
+									"value": "DC",
+									"type": "text"
+								},
+								{
+									"key": "console_name",
+									"value": "Dreamcast",
+									"type": "text"
+								}
+							]
+						},
 						"url": {
-							"raw": ""
+							"raw": "{{ipaddress}}/api/consoles",
+							"host": [
+								"{{ipaddress}}"
+							],
+							"path": [
+								"api",
+								"consoles"
+							]
 						}
 					},
 					"response": []
