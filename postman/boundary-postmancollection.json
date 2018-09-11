@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5116f652-b3e8-4e94-9e39-5af1f4af3152",
+		"_postman_id": "85eee67a-b7af-478b-9be6-4224bd5a6621",
 		"name": "Boundary Technologies",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -13,13 +13,17 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{ipaddress}}/games",
+							"raw": "{{ipaddress}}/api/games",
 							"host": [
 								"{{ipaddress}}"
 							],
 							"path": [
+								"api",
 								"games"
 							]
 						},
@@ -42,11 +46,12 @@
 							"raw": "{\n\t\"game_name\": \"The Legend of Zelda : A Link to the Past\",\n\t\"console_code\": \"SNES\"\n}"
 						},
 						"url": {
-							"raw": "{{ipaddress}}/games",
+							"raw": "{{ipaddress}}/api/games",
 							"host": [
 								"{{ipaddress}}"
 							],
 							"path": [
+								"api",
 								"games"
 							]
 						},
@@ -55,24 +60,23 @@
 					"response": []
 				},
 				{
-					"name": "Get Games By Console",
+					"name": "Get Games By Id",
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{ipaddress}}/games?console=SNES",
+							"raw": "{{ipaddress}}/api/games/1",
 							"host": [
 								"{{ipaddress}}"
 							],
 							"path": [
-								"games"
-							],
-							"query": [
-								{
-									"key": "console",
-									"value": "SNES"
-								}
+								"api",
+								"games",
+								"1"
 							]
 						}
 					},
@@ -83,9 +87,20 @@
 					"request": {
 						"method": "DELETE",
 						"header": [],
-						"body": {},
-						"url": {
+						"body": {
+							"mode": "raw",
 							"raw": ""
+						},
+						"url": {
+							"raw": "{{ipaddress}}/api/games/1",
+							"host": [
+								"{{ipaddress}}"
+							],
+							"path": [
+								"api",
+								"games",
+								"1"
+							]
 						}
 					},
 					"response": []
@@ -100,13 +115,17 @@
 					"request": {
 						"method": "GET",
 						"header": [],
-						"body": {},
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
 						"url": {
-							"raw": "{{ipaddress}}/consoles",
+							"raw": "{{ipaddress}}/api/consoles",
 							"host": [
 								"{{ipaddress}}"
 							],
 							"path": [
+								"api",
 								"consoles"
 							]
 						}
